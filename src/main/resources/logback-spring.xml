@@ -17,26 +17,28 @@
 		</filter>
 	</appender>
 
-	<appender name="FILE-ENGINE"
-		class="ch.qos.logback.core.FileAppender">
-		<file>/emailLogfile${bySecond}.log</file>
-		<encoder>
-			<pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] - %msg%n</pattern>
-		</encoder>
-		<filter class="ch.qos.logback.classic.filter.LevelFilter">
-			<level>INFO</level>
-			<onMatch>ACCEPT</onMatch>
-			<onMismatch>ACCEPT</onMismatch>
-		</filter>
-	</appender>
+	<appender name="FILEROLLER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <!-- Monthly rollover -->
+      <fileNamePattern>../logs/Bulk-Mail-App-Logs/%d{yyyy/MM}/Bulk-mail-App-Logfile.log</fileNamePattern>
+
+      <!-- keep 6 month's worth of history capped at 3GB total size -->
+      <maxHistory>6</maxHistory>
+      <totalSizeCap>3GB</totalSizeCap>
+    </rollingPolicy>
+	    
+    <encoder>
+      <pattern>%d{yyyy-MM-dd HH:mm, IST} [%thread] %-5level %logger - %msg%n</pattern>
+    </encoder>
+  </appender> 
 
 	<logger name="com.xworkz.ombn" level="ALL" additivity="false">
-		<appender-ref ref="FILE-ENGINE" />
+		<appender-ref ref="FILEROLLER" />
 		<appender-ref ref="STDOUT" />
 	</logger>
 
 	<root level="ALL">
-		<appender-ref ref="FILE-ENGINE" />
+		<appender-ref ref="FILEROLLER" />
 		<appender-ref ref="STDOUT" />
 	</root>
 
